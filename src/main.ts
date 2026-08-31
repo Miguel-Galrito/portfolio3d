@@ -54,6 +54,35 @@ async function bootstrap() {
     }, 500);
   }
 
+  // Keyboard navigation
+  let currentFocusIndex = -1;
+  window.addEventListener('keydown', (e) => {
+    if (!scene.orbitalSystem || scene.orbitalSystem.satellites.length === 0) return;
+    
+    const sats = scene.orbitalSystem.satellites;
+    const total = sats.length;
+    
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      currentFocusIndex = (currentFocusIndex + 1) % total;
+      focusSatellite(currentFocusIndex);
+    } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+      currentFocusIndex = (currentFocusIndex - 1 + total) % total;
+      focusSatellite(currentFocusIndex);
+    } else if (e.key === 'Enter') {
+      if (currentFocusIndex >= 0 && currentFocusIndex < total) {
+         const repo = sats[currentFocusIndex].userData.repo;
+         window.open(repo.url, '_blank');
+      }
+    }
+  });
+
+  function focusSatellite(index: number) {
+    const sats = scene.orbitalSystem!.satellites;
+    const sat = sats[index];
+    scene.focusedSatellite = sat;
+    ui.showDetails(sat.userData.repo);
+  }
+
   // Animation Loop
   const clock = new THREE.Clock();
   

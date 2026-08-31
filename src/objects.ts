@@ -17,33 +17,46 @@ export class OrbitalSystem {
   public satellites: THREE.Group[] = [];
   public orbitLines: THREE.Line[] = [];
   public group: THREE.Group;
-  
+
   constructor(scene: THREE.Scene, private repos: RepoData[]) {
     this.group = new THREE.Group();
     scene.add(this.group);
 
-    // Create central core
-    const coreGeo = new THREE.IcosahedronGeometry(3, 1);
-    const coreMat = new THREE.MeshStandardMaterial({
-      color: 0x050510,
-      emissive: 0x002244,
-      wireframe: true,
+    // Core - Glowing Volumetric Star
+    const coreGeo = new THREE.SphereGeometry(3, 32, 32);
+    const coreMat = new THREE.MeshBasicMaterial({
+      color: 0x00aaff,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.8,
     });
     this.core = new THREE.Mesh(coreGeo, coreMat);
-    this.group.add(this.core);
-
-    // Add inner glow to core
-    const innerCoreGeo = new THREE.IcosahedronGeometry(2.5, 2);
-    const innerCoreMat = new THREE.MeshBasicMaterial({
+    
+    // Core Outer Glow
+    const glowGeo = new THREE.SphereGeometry(3.5, 32, 32);
+    const glowMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
-      wireframe: true,
       transparent: true,
-      opacity: 0.1
+      opacity: 0.15,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
     });
-    const innerCore = new THREE.Mesh(innerCoreGeo, innerCoreMat);
-    this.core.add(innerCore);
+    const glowMesh = new THREE.Mesh(glowGeo, glowMat);
+    this.core.add(glowMesh);
+
+    // Core Data for HUD
+    this.core.userData = {
+      repo: {
+        name: "portfolio3d",
+        description: "Interactive 3D Orbital Command Portfolio powered by Vite, TypeScript, and Three.js.",
+        url: "https://github.com/Miguel-Galrito/portfolio3d",
+        stars: 0, forks: 0,
+        primaryLanguage: "TypeScript",
+        topics: ["3d", "portfolio", "threejs"],
+        languages: [{name: "TypeScript", percentage: 90}, {name: "HTML", percentage: 10}]
+      }
+    };
+    
+    this.group.add(this.core);
 
     this.createSatellites();
   }
@@ -52,50 +65,78 @@ export class OrbitalSystem {
     const numRepos = this.repos.length;
     if (numRepos === 0) return;
 
-    // Distribute orbits
     const baseRadius = 8;
     const radiusStep = 4;
 
     this.repos.forEach((repo, index) => {
       const radius = baseRadius + (index * radiusStep);
-      const speed = 0.5 / Math.sqrt(radius); // Kepler's 3rd law approximation
+      const speed = 0.5 / Math.sqrt(radius);
       const startAngle = Math.random() * Math.PI * 2;
       
       const { color, emissive, geometry } = getLanguageColorAndGeometry(repo.primaryLanguage);
 
-      // Create Satellite Group
       const satGroup = new THREE.Group();
-      // Store custom data on userData
       satGroup.userData = {
         repo,
         angle: startAngle,
         radius,
         speed,
-        baseY: (Math.random() - 0.5) * 2 // slight tilt or offset
+        baseY: (Math.random() - 0.5) * 2
       };
 
-      // Create Satellite Mesh
-      const material = new THREE.MeshStandardMaterial({
-        color,
-        emissive,
-        emissiveIntensity: 0.5,
-        roughness: 0.2,
-        metalness: 0.8,
-        transparent: true,
-        opacity: 0.9
-      });
-      const mesh = new THREE.Mesh(geometry, material);
+      // Create primary mesh with better materials
+      let material: THREE.Material;
+      const lang = repo.primaryLanguage.toLowerCase();
       
-      // Wireframe overlay for technical look
-      const wireMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.2 });
-      const wireMesh = new THREE.Mesh(geometry, wireMat);
-      mesh.add(wireMesh);
+      if (['typescript', 'html', 'css', 'javascript'].includes(lang)) {
+        // Crystalline Web Monolith
+        material = new THREE.MeshPhysicalMaterial({
+          color, emissive,
+          emissiveIntensity: 0.2,
+          roughness: 0.1,
+          metalness: 0.1,
+          transmission: 0.9,
+          thickness: 0.5,
+          ior: 1.5,
+          transparent: true
+        });
+      } else if (['c++', 'c', 'rust', 'matlab', 'cmake'].includes(lang)) {
+        // Metallic Aerospace Precision
+        material = new THREE.MeshStandardMaterial({
+          color, emissive,
+          emissiveIntensity: 0.4,
+          roughness: 0.4,
+          metalness: 0.9,
+        });
+        
+        // Add orbital ring to aerospace nodes
+        const ringGeo = new THREE.TorusGeometry(1.8, 0.05, 16, 64);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.5 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2;
+        satGroup.add(ring);
+      } else {
+        // AI / Default - Data Pulse
+        material = new THREE.MeshStandardMaterial({
+          color, emissive,
+          emissiveIntensity: 0.8,
+          roughness: 0.3,
+          metalness: 0.5,
+          wireframe: true
+        });
+        // Solid core inside wireframe
+        const coreMat = new THREE.MeshBasicMaterial({ color: emissive });
+        const innerMesh = new THREE.Mesh(geometry, coreMat);
+        innerMesh.scale.setScalar(0.7);
+        satGroup.add(innerMesh);
+      }
 
+      const mesh = new THREE.Mesh(geometry, material);
       satGroup.add(mesh);
+      
       this.group.add(satGroup);
       this.satellites.push(satGroup);
 
-      // Create Orbit Line
       const orbitLine = createOrbitLine(radius);
       orbitLine.position.y = satGroup.userData.baseY;
       this.group.add(orbitLine);
@@ -105,30 +146,38 @@ export class OrbitalSystem {
 
   public update(time: number) {
     // Rotate core slowly
-    this.core.rotation.y = time * 0.1;
-    this.core.rotation.x = time * 0.05;
+    this.core.rotation.y = time * 0.2;
+    
+    // Pulse core scale slightly
+    const scale = 1 + Math.sin(time * 2) * 0.02;
+    this.core.scale.set(scale, scale, scale);
 
     // Update satellites
     this.satellites.forEach((sat) => {
       const data = sat.userData;
-      data.angle += data.speed * 0.02; // dt approx
+      data.angle += data.speed * 0.02;
       
       sat.position.x = Math.cos(data.angle) * data.radius;
       sat.position.z = Math.sin(data.angle) * data.radius;
-      sat.position.y = data.baseY + Math.sin(time + data.radius) * 0.5; // slight bobbing
+      sat.position.y = data.baseY + Math.sin(time + data.radius) * 0.5;
       
       // Rotate mesh itself
-      if (sat.children[0]) {
-        sat.children[0].rotation.x = time * 0.5;
-        sat.children[0].rotation.y = time * 0.7;
-      }
+      sat.children.forEach(child => {
+        child.rotation.x = time * 0.5;
+        child.rotation.y = time * 0.7;
+      });
     });
   }
 
-  public getIntersectedSatellite(raycaster: THREE.Raycaster): THREE.Group | null {
+  public getIntersectedSatellite(raycaster: THREE.Raycaster): THREE.Group | THREE.Mesh | null {
+    // Check core first
+    const coreIntersect = raycaster.intersectObject(this.core, true);
+    if (coreIntersect.length > 0) {
+      return this.core;
+    }
+
     const intersects = raycaster.intersectObjects(this.satellites, true);
     if (intersects.length > 0) {
-      // Return the group containing the userData
       let object: THREE.Object3D | null = intersects[0].object;
       while (object && object.parent && !object.userData.repo) {
         object = object.parent;

@@ -27,7 +27,7 @@
       </header>
 
       <!-- Selection Details Panel (Hidden by default) -->
-      <div id="details-panel" class="self-end max-w-sm w-full bg-orbitDark/80 backdrop-blur-md border border-cyan-500/30 rounded-lg p-5 transform translate-x-12 opacity-0 transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+      <div id="details-panel" class="fixed right-4 md:right-8 top-1/2 -translate-y-1/2 w-80 max-w-[90vw] bg-orbitDark/80 backdrop-blur-md border border-cyan-500/30 rounded-lg p-5 transform translate-x-12 opacity-0 transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(0,240,255,0.1)]">
         <div class="flex justify-between items-start mb-2">
           <h2 id="repo-name" class="text-lg font-bold text-cyan-300 break-words w-5/6">Project Name</h2>
           <button id="close-panel" class="text-cyan-500 hover:text-white transition-colors">
@@ -77,8 +77,8 @@
           </span>
           <span id="status-text" class="text-cyan-400">Initializing Systems...</span>
         </div>
-        <div class="text-xs text-gray-500">
-          [ DRAG to rotate | SCROLL to zoom | CLICK node to focus ]
+        <div class="text-[10px] md:text-xs text-gray-500 text-right">
+          [ ⬅/➡ NAVIGATE | ENTER OPEN | DRAG ROTATE | SCROLL ZOOM ]
         </div>
       </footer>
     </div>

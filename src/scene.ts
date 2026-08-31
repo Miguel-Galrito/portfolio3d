@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { OrbitalSystem, RepoData } from './objects';
 
 export class SceneController {
@@ -9,6 +11,7 @@ export class SceneController {
   public camera: THREE.PerspectiveCamera;
   public renderer: THREE.WebGLRenderer;
   private composer: EffectComposer;
+  private fxaaPass: ShaderPass;
   
   public orbitalSystem: OrbitalSystem | null = null;
   private raycaster = new THREE.Raycaster();
@@ -26,7 +29,7 @@ export class SceneController {
   private phi = Math.PI / 3;
   private radius = 40;
   
-  public focusedSatellite: THREE.Group | null = null;
+  public focusedSatellite: THREE.Group | THREE.Mesh | null = null;
   public onSatelliteClick: ((repo: RepoData) => void) | null = null;
 
   constructor(container: HTMLElement) {
@@ -41,22 +44,35 @@ export class SceneController {
     this.camera.lookAt(this.currentCameraLookAt);
 
     // Setup Renderer
-    this.renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance", alpha: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setClearColor(0x070b19);
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.2;
     container.appendChild(this.renderer.domElement);
 
-    // Post-Processing (Bloom)
+    // Post-Processing (Bloom + FXAA)
     const renderScene = new RenderPass(this.scene, this.camera);
+    
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    bloomPass.threshold = 0.2;
-    bloomPass.strength = 1.2; // intense for sci-fi look
-    bloomPass.radius = 0.5;
+    bloomPass.threshold = 0.15;
+    bloomPass.strength = 1.5; 
+    bloomPass.radius = 0.8;
 
-    this.composer = new EffectComposer(this.renderer);
+    this.fxaaPass = new ShaderPass(FXAAShader);
+    this.updateFXAA();
+
+    // Use MSAA Render Target if possible
+    const renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+      samples: 4,
+      type: THREE.HalfFloatType,
+    });
+
+    this.composer = new EffectComposer(this.renderer, renderTarget);
     this.composer.addPass(renderScene);
     this.composer.addPass(bloomPass);
+    this.composer.addPass(this.fxaaPass);
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0x112233);
@@ -110,11 +126,16 @@ export class SceneController {
 
     // Camera Lerping
     if (this.focusedSatellite) {
-      // Offset camera slightly from satellite
       const satPos = this.focusedSatellite.position;
-      const offset = new THREE.Vector3(satPos.x, satPos.y + 2, satPos.z + 5);
+      let offsetDist = 5;
       
-      // We want to smoothly look at the satellite while positioning nearby
+      // If it's the core (at 0,0,0), step further back
+      if (satPos.length() < 0.1) {
+        offsetDist = 12;
+      }
+      
+      const offset = new THREE.Vector3(satPos.x, satPos.y + 2, satPos.z + offsetDist);
+      
       this.targetCameraPos.copy(offset);
       this.targetCameraLookAt.copy(satPos);
     } else {
@@ -210,10 +231,17 @@ export class SceneController {
     this.focusedSatellite = null;
   }
 
+  private updateFXAA() {
+    const pixelRatio = this.renderer.getPixelRatio();
+    this.fxaaPass.material.uniforms['resolution'].value.x = 1 / (window.innerWidth * pixelRatio);
+    this.fxaaPass.material.uniforms['resolution'].value.y = 1 / (window.innerHeight * pixelRatio);
+  }
+
   private onWindowResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.composer.setSize(window.innerWidth, window.innerHeight);
+    this.updateFXAA();
   }
 }
