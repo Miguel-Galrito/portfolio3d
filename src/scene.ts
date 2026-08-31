@@ -30,7 +30,7 @@ export class SceneController {
   private theta = Math.PI / 4;
   private phi = Math.PI / 3;
   private radius = 40;
-  private focusedOffsetDist = 5;
+  public focusedOffsetDist = 5;
   
   public focusedSatellite: THREE.Group | THREE.Mesh | null = null;
   public onSatelliteClick: ((repo: RepoData) => void) | null = null;

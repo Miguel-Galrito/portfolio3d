@@ -5,6 +5,8 @@
 ![Three.js](https://img.shields.io/badge/Three.js-black?style=flat&logo=three.js&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 
+**Live Demo:** [https://miguel-galrito.github.io/portfolio3d/](https://miguel-galrito.github.io/portfolio3d/)
+
 An interactive, high-performance 3D portfolio application visualizing GitHub repositories as an orbital telemetry system. Built specifically for showcasing engineering projects in Aerospace, Systems, and Artificial Intelligence.
 
 ## 🪐 Visual Architecture
