@@ -9,6 +9,7 @@
   <body class="bg-orbitDark overflow-hidden text-white font-mono selection:bg-cyan-500/30">
     <!-- WebGL Canvas Container -->
     <div id="canvas-container" class="absolute inset-0 z-0"></div>
+    <div id="css-container" class="absolute inset-0 z-0 pointer-events-none"></div>
 
     <!-- HUD Overlay -->
     <div id="hud-overlay" class="absolute inset-0 z-10 pointer-events-none p-4 md:p-8 flex flex-col justify-between opacity-0 transition-opacity duration-500">
@@ -46,10 +47,16 @@
           </div>
         </div>
 
-        <a id="repo-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-500/50 hover:border-cyan-400 text-cyan-300 py-2 rounded transition-all group">
-          <span>Access Repository</span>
-          <i data-lucide="external-link" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-        </a>
+        <div class="flex gap-2 w-full">
+          <a id="repo-link" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center gap-2 bg-gray-800/60 hover:bg-gray-700 border border-gray-600 text-gray-300 py-2 rounded transition-all group">
+            <i data-lucide="github" class="w-4 h-4"></i>
+            <span class="text-xs">GitHub</span>
+          </a>
+          <a id="site-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden flex-1 flex items-center justify-center gap-2 bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-500/50 hover:border-cyan-400 text-cyan-300 py-2 rounded transition-all group">
+            <i data-lucide="external-link" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            <span class="text-xs">Live Site</span>
+          </a>
+        </div>
       </div>
 
       <!-- Footer / Loading Status -->

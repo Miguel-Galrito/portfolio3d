@@ -4,6 +4,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitalSystem, RepoData } from './objects';
 
 export class SceneController {
@@ -12,6 +13,7 @@ export class SceneController {
   public renderer: THREE.WebGLRenderer;
   private composer: EffectComposer;
   private fxaaPass: ShaderPass;
+  private labelRenderer: CSS2DRenderer;
   
   public orbitalSystem: OrbitalSystem | null = null;
   private raycaster = new THREE.Raycaster();
@@ -53,12 +55,18 @@ export class SceneController {
     this.renderer.toneMappingExposure = 1.2;
     container.appendChild(this.renderer.domElement);
 
+    // Setup CSS2D Renderer
+    this.labelRenderer = new CSS2DRenderer();
+    this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    const cssContainer = document.getElementById('css-container')!;
+    cssContainer.appendChild(this.labelRenderer.domElement);
+
     // Post-Processing (Bloom + FXAA)
     const renderScene = new RenderPass(this.scene, this.camera);
     
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    bloomPass.threshold = 0.25;
-    bloomPass.strength = 1.0; 
+    bloomPass.threshold = 0.1;
+    bloomPass.strength = 1.2; 
     bloomPass.radius = 0.5;
 
     this.fxaaPass = new ShaderPass(FXAAShader);
@@ -150,6 +158,7 @@ export class SceneController {
     this.camera.lookAt(this.currentCameraLookAt);
 
     this.composer.render();
+    this.labelRenderer.render(this.scene, this.camera);
   }
 
   private updateCameraTargetFromOrbit() {
@@ -254,6 +263,7 @@ export class SceneController {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.composer.setSize(window.innerWidth, window.innerHeight);
+    this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
     this.updateFXAA();
   }
 }

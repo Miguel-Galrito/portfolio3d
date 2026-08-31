@@ -40,6 +40,14 @@ export class UIController {
     document.getElementById('repo-name')!.textContent = repo.name;
     document.getElementById('repo-desc')!.textContent = repo.description;
     (document.getElementById('repo-link') as HTMLAnchorElement).href = repo.url;
+    
+    const siteLink = document.getElementById('site-link') as HTMLAnchorElement;
+    if (repo.homepageUrl) {
+      siteLink.href = repo.homepageUrl;
+      siteLink.classList.remove('hidden');
+    } else {
+      siteLink.classList.add('hidden');
+    }
 
     // Badges / Topics
     const topicsContainer = document.getElementById('repo-topics')!;

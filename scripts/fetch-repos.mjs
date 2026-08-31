@@ -25,6 +25,7 @@ const queryPinned = `
           url
           stargazerCount
           forkCount
+          homepageUrl
           primaryLanguage {
             name
             color
@@ -62,6 +63,7 @@ const queryRecent = `
         url
         stargazerCount
         forkCount
+        homepageUrl
         primaryLanguage {
           name
           color
@@ -120,6 +122,7 @@ function processRepos(reposData) {
       url: repo.url,
       stars: repo.stargazerCount,
       forks: repo.forkCount,
+      homepageUrl: repo.homepageUrl || null,
       primaryLanguage: repo.primaryLanguage?.name || 'Unknown',
       topics: repo.repositoryTopics?.nodes.map(n => n.topic.name) || [],
       languages
@@ -141,6 +144,7 @@ async function run() {
         name: "Aerospace-Telemetry",
         description: "Real-time telemetry processing engine for orbital mechanics.",
         url: "#",
+        homepageUrl: "https://example.com",
         stars: 42,
         forks: 5,
         primaryLanguage: "C++",
