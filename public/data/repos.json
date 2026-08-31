@@ -1,88 +1,85 @@
 [
   {
-    "name": "Aerospace-Telemetry",
-    "description": "Real-time telemetry processing engine for orbital mechanics.",
-    "url": "#",
-    "stars": 42,
-    "forks": 5,
-    "primaryLanguage": "C++",
-    "topics": [
-      "aerospace",
-      "systems",
-      "cpp"
-    ],
+    "name": "willow-dental-ai-receptionist",
+    "description": "We help dental clinics with an AI receptionist.",
+    "url": "https://github.com/Miguel-Galrito/willow-dental-ai-receptionist",
+    "stars": 0,
+    "forks": 0,
+    "primaryLanguage": "HTML",
+    "topics": [],
     "languages": [
       {
-        "name": "C++",
-        "percentage": 80
+        "name": "HTML",
+        "percentage": 67
       },
       {
-        "name": "CMake",
-        "percentage": 20
+        "name": "JavaScript",
+        "percentage": 33
       }
     ]
   },
   {
-    "name": "AI-Pathfinder",
-    "description": "Neural network pathfinding for autonomous drones.",
-    "url": "#",
-    "stars": 128,
-    "forks": 12,
+    "name": "orbit-sim",
+    "description": "Modular two-body orbital mechanics simulator in Python (RK4, NumPy, Streamlit).",
+    "url": "https://github.com/Miguel-Galrito/orbit-sim",
+    "stars": 0,
+    "forks": 0,
     "primaryLanguage": "Python",
-    "topics": [
-      "ai",
-      "machine-learning",
-      "robotics"
-    ],
+    "topics": [],
     "languages": [
       {
         "name": "Python",
-        "percentage": 95
-      },
-      {
-        "name": "Jupyter Notebook",
-        "percentage": 5
+        "percentage": 100
       }
     ]
   },
   {
-    "name": "Web-Dashboard",
-    "description": "Frontend interface for drone control.",
-    "url": "#",
-    "stars": 15,
-    "forks": 2,
-    "primaryLanguage": "TypeScript",
-    "topics": [
-      "web",
-      "react",
-      "dashboard"
-    ],
+    "name": "multi-agent-investment-analyzer",
+    "description": "AI-powered B2B multi-agent investment analysis system using LangGraph, FastAPI & Next.js. Autonomous agents research financials, assess risk, and generate professional investment recommendations.",
+    "url": "https://github.com/Miguel-Galrito/multi-agent-investment-analyzer",
+    "stars": 0,
+    "forks": 0,
+    "primaryLanguage": "Python",
+    "topics": [],
     "languages": [
       {
+        "name": "Python",
+        "percentage": 52
+      },
+      {
         "name": "TypeScript",
-        "percentage": 70
+        "percentage": 38
       },
       {
         "name": "CSS",
-        "percentage": 30
+        "percentage": 9
+      },
+      {
+        "name": "JavaScript",
+        "percentage": 1
       }
     ]
   },
   {
-    "name": "Rust-Core",
-    "description": "High performance systems core.",
-    "url": "#",
-    "stars": 88,
-    "forks": 10,
-    "primaryLanguage": "Rust",
-    "topics": [
-      "systems",
-      "rust"
-    ],
+    "name": "doomscrolling-calculator",
+    "description": "Calculadora de Doomscrolling: analisa o teu Screen Time com IA (Claude 3.5 Sonnet) e gera um relatorio brutalmente honesto do custo de oportunidade",
+    "url": "https://github.com/Miguel-Galrito/doomscrolling-calculator",
+    "stars": 0,
+    "forks": 0,
+    "primaryLanguage": "TypeScript",
+    "topics": [],
     "languages": [
       {
-        "name": "Rust",
-        "percentage": 100
+        "name": "TypeScript",
+        "percentage": 95
+      },
+      {
+        "name": "JavaScript",
+        "percentage": 4
+      },
+      {
+        "name": "CSS",
+        "percentage": 0
       }
     ]
   }

@@ -4,7 +4,7 @@ import { SceneController } from './scene';
 import { UIController } from './ui';
 import { RepoData } from './objects';
 
-window.addEventListener('error', e => { document.getElementById('repo-desc').textContent = e.message; document.getElementById('details-panel').classList.remove('opacity-0'); }); async function bootstrap() {
+async function bootstrap() {
   const ui = new UIController(() => {
     scene.clearFocus();
   });
