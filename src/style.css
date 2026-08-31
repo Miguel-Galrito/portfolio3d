@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .animate-spin-reverse {
+    animation: spin 1s linear infinite reverse;
+  }
+}
+
+#canvas-container canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+  outline: none;
+}

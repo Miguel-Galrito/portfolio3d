@@ -1,0 +1,89 @@
+[
+  {
+    "name": "Aerospace-Telemetry",
+    "description": "Real-time telemetry processing engine for orbital mechanics.",
+    "url": "#",
+    "stars": 42,
+    "forks": 5,
+    "primaryLanguage": "C++",
+    "topics": [
+      "aerospace",
+      "systems",
+      "cpp"
+    ],
+    "languages": [
+      {
+        "name": "C++",
+        "percentage": 80
+      },
+      {
+        "name": "CMake",
+        "percentage": 20
+      }
+    ]
+  },
+  {
+    "name": "AI-Pathfinder",
+    "description": "Neural network pathfinding for autonomous drones.",
+    "url": "#",
+    "stars": 128,
+    "forks": 12,
+    "primaryLanguage": "Python",
+    "topics": [
+      "ai",
+      "machine-learning",
+      "robotics"
+    ],
+    "languages": [
+      {
+        "name": "Python",
+        "percentage": 95
+      },
+      {
+        "name": "Jupyter Notebook",
+        "percentage": 5
+      }
+    ]
+  },
+  {
+    "name": "Web-Dashboard",
+    "description": "Frontend interface for drone control.",
+    "url": "#",
+    "stars": 15,
+    "forks": 2,
+    "primaryLanguage": "TypeScript",
+    "topics": [
+      "web",
+      "react",
+      "dashboard"
+    ],
+    "languages": [
+      {
+        "name": "TypeScript",
+        "percentage": 70
+      },
+      {
+        "name": "CSS",
+        "percentage": 30
+      }
+    ]
+  },
+  {
+    "name": "Rust-Core",
+    "description": "High performance systems core.",
+    "url": "#",
+    "stars": 88,
+    "forks": 10,
+    "primaryLanguage": "Rust",
+    "topics": [
+      "systems",
+      "rust"
+    ],
+    "languages": [
+      {
+        "name": "Rust",
+        "percentage": 100
+      }
+    ]
+  }
+]

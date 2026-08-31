@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Miguel-Galrito | Orbital Portfolio</title>
+  </head>
+  <body class="bg-orbitDark overflow-hidden text-white font-mono selection:bg-cyan-500/30">
+    <!-- WebGL Canvas Container -->
+    <div id="canvas-container" class="absolute inset-0 z-0"></div>
+
+    <!-- HUD Overlay -->
+    <div id="hud-overlay" class="absolute inset-0 z-10 pointer-events-none p-4 md:p-8 flex flex-col justify-between opacity-0 transition-opacity duration-500">
+      
+      <!-- Header -->
+      <header class="flex justify-between items-start pointer-events-auto">
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-widest text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]">ORBITAL COMMAND</h1>
+          <p class="text-xs md:text-sm text-cyan-200/70 tracking-widest uppercase">Miguel-Galrito Telemetry</p>
+        </div>
+        <div class="flex gap-4">
+          <a href="https://github.com/Miguel-Galrito" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">
+            <i data-lucide="github" class="w-6 h-6"></i>
+          </a>
+        </div>
+      </header>
+
+      <!-- Selection Details Panel (Hidden by default) -->
+      <div id="details-panel" class="self-end max-w-sm w-full bg-orbitDark/80 backdrop-blur-md border border-cyan-500/30 rounded-lg p-5 transform translate-x-12 opacity-0 transition-all duration-500 pointer-events-auto shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+        <div class="flex justify-between items-start mb-2">
+          <h2 id="repo-name" class="text-lg font-bold text-cyan-300 break-words w-5/6">Project Name</h2>
+          <button id="close-panel" class="text-cyan-500 hover:text-white transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+        
+        <p id="repo-desc" class="text-sm text-gray-300 mb-4 line-clamp-3">Description goes here...</p>
+        
+        <div class="space-y-3 mb-4">
+          <div>
+            <div class="text-xs text-cyan-500/80 mb-1 uppercase tracking-wider">Primary Stack</div>
+            <div id="repo-topics" class="flex flex-wrap gap-2">
+              <!-- Badges injected via JS -->
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-cyan-500/80 uppercase tracking-wider">Telemetry</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <div class="flex items-center gap-2 bg-black/40 rounded px-2 py-1">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400"></i>
+                <span id="repo-stars">0</span>
+              </div>
+              <div class="flex items-center gap-2 bg-black/40 rounded px-2 py-1">
+                <i data-lucide="git-fork" class="w-4 h-4 text-gray-400"></i>
+                <span id="repo-forks">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a id="repo-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-500/50 hover:border-cyan-400 text-cyan-300 py-2 rounded transition-all group">
+          <span>Access Repository</span>
+          <i data-lucide="external-link" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+      <!-- Footer / Loading Status -->
+      <footer class="flex justify-between items-end pointer-events-auto">
+        <div id="status-indicator" class="flex items-center gap-2 text-xs">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+          </span>
+          <span id="status-text" class="text-cyan-400">Initializing Systems...</span>
+        </div>
+        <div class="text-xs text-gray-500">
+          [ DRAG to rotate | SCROLL to zoom | CLICK node to focus ]
+        </div>
+      </footer>
+    </div>
+
+    <!-- Initial Loading Screen -->
+    <div id="loading-screen" class="absolute inset-0 z-50 bg-orbitDark flex flex-col items-center justify-center transition-opacity duration-1000">
+      <div class="relative w-24 h-24 mb-8">
+        <div class="absolute inset-0 border-t-2 border-cyan-500 rounded-full animate-spin"></div>
+        <div class="absolute inset-2 border-r-2 border-blue-500 rounded-full animate-spin-reverse" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
+        <div class="absolute inset-4 border-b-2 border-emerald-500 rounded-full animate-spin"></div>
+        <i data-lucide="satellite" class="absolute inset-0 m-auto w-8 h-8 text-cyan-200"></i>
+      </div>
+      <h2 class="text-xl tracking-[0.3em] text-cyan-300 mb-2">BOOT SEQUENCE</h2>
+      <div class="w-64 h-1 bg-gray-800 rounded overflow-hidden">
+        <div id="loading-bar" class="h-full bg-cyan-500 w-0 transition-all duration-300"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
