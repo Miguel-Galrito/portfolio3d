@@ -25,18 +25,18 @@ export class OrbitalSystem {
     // Core - Glowing Volumetric Star
     const coreGeo = new THREE.SphereGeometry(3, 32, 32);
     const coreMat = new THREE.MeshBasicMaterial({
-      color: 0x00aaff,
+      color: 0x0055aa, // Darker blue base
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.9,
     });
     this.core = new THREE.Mesh(coreGeo, coreMat);
     
     // Core Outer Glow
     const glowGeo = new THREE.SphereGeometry(3.5, 32, 32);
     const glowMat = new THREE.MeshBasicMaterial({
-      color: 0x00f0ff,
+      color: 0x00aaff, // Less intense glow base
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.2,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide
     });
@@ -92,7 +92,7 @@ export class OrbitalSystem {
         // Crystalline Web Monolith
         material = new THREE.MeshPhysicalMaterial({
           color, emissive,
-          emissiveIntensity: 0.2,
+          emissiveIntensity: 0.8, // Increased from 0.2
           roughness: 0.1,
           metalness: 0.1,
           transmission: 0.9,
@@ -104,7 +104,7 @@ export class OrbitalSystem {
         // Metallic Aerospace Precision
         material = new THREE.MeshStandardMaterial({
           color, emissive,
-          emissiveIntensity: 0.4,
+          emissiveIntensity: 0.8, // Increased from 0.4
           roughness: 0.4,
           metalness: 0.9,
         });
@@ -119,7 +119,7 @@ export class OrbitalSystem {
         // AI / Default - Data Pulse
         material = new THREE.MeshStandardMaterial({
           color, emissive,
-          emissiveIntensity: 0.8,
+          emissiveIntensity: 1.2, // Increased from 0.8
           roughness: 0.3,
           metalness: 0.5,
           wireframe: true

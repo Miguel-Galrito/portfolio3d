@@ -5,8 +5,10 @@ import { UIController } from './ui';
 import { RepoData } from './objects';
 
 async function bootstrap() {
+  let currentFocusIndex = -1;
   const ui = new UIController(() => {
-    scene.clearFocus();
+    scene.resetView();
+    currentFocusIndex = -1;
   });
   
   const container = document.getElementById('canvas-container')!;
@@ -55,7 +57,6 @@ async function bootstrap() {
   }
 
   // Keyboard navigation
-  let currentFocusIndex = -1;
   window.addEventListener('keydown', (e) => {
     if (!scene.orbitalSystem || scene.orbitalSystem.satellites.length === 0) return;
     
@@ -73,6 +74,10 @@ async function bootstrap() {
          const repo = sats[currentFocusIndex].userData.repo;
          window.open(repo.url, '_blank');
       }
+    } else if (e.key === 'Escape') {
+      scene.resetView();
+      ui.hideDetails();
+      currentFocusIndex = -1;
     }
   });
 
@@ -80,6 +85,7 @@ async function bootstrap() {
     const sats = scene.orbitalSystem!.satellites;
     const sat = sats[index];
     scene.focusedSatellite = sat;
+    scene.focusedOffsetDist = 5;
     ui.showDetails(sat.userData.repo);
   }
 

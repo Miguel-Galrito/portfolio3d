@@ -28,6 +28,7 @@ export class SceneController {
   private theta = Math.PI / 4;
   private phi = Math.PI / 3;
   private radius = 40;
+  private focusedOffsetDist = 5;
   
   public focusedSatellite: THREE.Group | THREE.Mesh | null = null;
   public onSatelliteClick: ((repo: RepoData) => void) | null = null;
@@ -56,9 +57,9 @@ export class SceneController {
     const renderScene = new RenderPass(this.scene, this.camera);
     
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    bloomPass.threshold = 0.15;
-    bloomPass.strength = 1.5; 
-    bloomPass.radius = 0.8;
+    bloomPass.threshold = 0.25;
+    bloomPass.strength = 1.0; 
+    bloomPass.radius = 0.5;
 
     this.fxaaPass = new ShaderPass(FXAAShader);
     this.updateFXAA();
@@ -75,10 +76,10 @@ export class SceneController {
     this.composer.addPass(this.fxaaPass);
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0x112233);
+    const ambientLight = new THREE.AmbientLight(0x334455);
     this.scene.add(ambientLight);
     
-    const pointLight = new THREE.PointLight(0x00f0ff, 2, 50);
+    const pointLight = new THREE.PointLight(0x00f0ff, 4, 100);
     this.scene.add(pointLight); // Core light
 
     // Particles (Stars/Dust)
@@ -127,14 +128,14 @@ export class SceneController {
     // Camera Lerping
     if (this.focusedSatellite) {
       const satPos = this.focusedSatellite.position;
-      let offsetDist = 5;
+      let actualOffset = this.focusedOffsetDist;
       
       // If it's the core (at 0,0,0), step further back
       if (satPos.length() < 0.1) {
-        offsetDist = 12;
+        actualOffset = Math.max(this.focusedOffsetDist, 10);
       }
       
-      const offset = new THREE.Vector3(satPos.x, satPos.y + 2, satPos.z + offsetDist);
+      const offset = new THREE.Vector3(satPos.x, satPos.y + actualOffset * 0.4, satPos.z + actualOffset);
       
       this.targetCameraPos.copy(offset);
       this.targetCameraLookAt.copy(satPos);
@@ -203,9 +204,13 @@ export class SceneController {
   }
 
   private onWheel(e: WheelEvent) {
-    if (this.focusedSatellite) return;
+    if (this.focusedSatellite) {
+      this.focusedOffsetDist += e.deltaY * 0.01;
+      this.focusedOffsetDist = Math.max(3, Math.min(30, this.focusedOffsetDist));
+      return;
+    }
     this.radius += e.deltaY * 0.05;
-    this.radius = Math.max(10, Math.min(100, this.radius));
+    this.radius = Math.max(5, Math.min(100, this.radius));
   }
 
   private onClick(e: MouseEvent) {
@@ -220,6 +225,7 @@ export class SceneController {
       const hit = this.orbitalSystem.getIntersectedSatellite(this.raycaster);
       if (hit) {
         this.focusedSatellite = hit;
+        this.focusedOffsetDist = 5; // Reset offset dist when clicking a new one
         if (this.onSatelliteClick) {
           this.onSatelliteClick(hit.userData.repo);
         }
@@ -229,6 +235,12 @@ export class SceneController {
 
   public clearFocus() {
     this.focusedSatellite = null;
+  }
+
+  public resetView() {
+    this.radius = 40;
+    this.focusedOffsetDist = 5;
+    this.clearFocus();
   }
 
   private updateFXAA() {

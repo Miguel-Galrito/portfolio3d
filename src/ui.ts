@@ -39,8 +39,6 @@ export class UIController {
   public showDetails(repo: RepoData) {
     document.getElementById('repo-name')!.textContent = repo.name;
     document.getElementById('repo-desc')!.textContent = repo.description;
-    document.getElementById('repo-stars')!.textContent = repo.stars.toString();
-    document.getElementById('repo-forks')!.textContent = repo.forks.toString();
     (document.getElementById('repo-link') as HTMLAnchorElement).href = repo.url;
 
     // Badges / Topics
